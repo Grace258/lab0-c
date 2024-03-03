@@ -190,6 +190,10 @@ void q_reverse(struct list_head *head);
  */
 void q_reverseK(struct list_head *head, int k);
 
+void merge(struct list_head *left, struct list_head *right, struct list_head *head);
+
+void merge_sort(struct list_head *head);
+
 /**
  * q_sort() - Sort elements of queue in ascending/descending order
  * @head: header of queue
