@@ -43,15 +43,16 @@ bool q_insert_head(struct list_head *head, char *s)
     if (head == NULL)
         return false;
 
-    element_t *new_element = (element_t *) malloc(sizeof(element_t));
+    element_t *new_element = malloc(sizeof(element_t));
     if (new_element == NULL)
         return false;
 
-    new_element->value = strdup(s);
+    new_element->value = malloc(strlen(s) + 1);
     if (new_element->value == NULL) {
-        free(new_element);
+        q_release_element(new_element);
         return false;
     }
+    strncpy(new_element->value, s, strlen(s) + 1);
     list_add(&new_element->list, head);
     return true;
 }
@@ -62,15 +63,16 @@ bool q_insert_tail(struct list_head *head, char *s)
     if (head == NULL)
         return false;
 
-    element_t *new_element = (element_t *) malloc(sizeof(element_t));
+    element_t *new_element = malloc(sizeof(element_t));
     if (new_element == NULL)
         return false;
 
-    new_element->value = strdup(s);
+    new_element->value = malloc(strlen(s) + 1);
     if (new_element->value == NULL) {
-        free(new_element);
+        q_release_element(new_element);
         return false;
     }
+    strncpy(new_element->value, s, strlen(s) + 1);
     list_add_tail(&new_element->list, head);
     return true;
 }
@@ -182,16 +184,14 @@ void q_swap(struct list_head *head)
 /* Reverse elements in queue */
 void q_reverse(struct list_head *head)
 {
-    if (head == NULL || list_empty(head) || list_is_singular(head))
+    if (head == NULL || list_empty(head))
         return;
 
     struct list_head *current, *next_node;
     list_for_each_safe (current, next_node, head) {
-        current->next = current->prev;
-        current->prev = next_node;
+        list_move(current, head);
     }
-    current->next = current->prev;
-    current->prev = next_node;
+
     return;
 }
 
